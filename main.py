@@ -41,9 +41,13 @@ def main() -> int:
     line = LINE.strip()
 
     # Gate self-check: UTF-8 text, 1 to 200 characters, not only whitespace,
-    # and a single sentence.
+    # exactly one sentence, and a single physical line (the judge reads
+    # the file as one line; an embedded newline would split the joke).
     if not line:
         print("error: line is empty", file=sys.stderr)
+        return 1
+    if "\n" in line or "\r" in line:
+        print("error: line must be a single physical line", file=sys.stderr)
         return 1
     if len(line) > 200:
         print(f"error: line is {len(line)} characters, over the 200 limit",
